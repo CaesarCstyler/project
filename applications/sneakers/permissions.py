@@ -1,15 +1,8 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
-# user1, user2
-# post/1/ user1
-# post2 2 user2
-
 class IsOwner(BasePermission):
 
-    def has_permission(self, request, view): # GET, POST
-        # print(request.user.is_authenticated)
-        # print(SAFE_METHODS)
-        # return True
+    def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
         return request.user.is_authenticated

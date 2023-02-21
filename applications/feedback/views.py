@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 from applications.feedback.models import Favorite
 from applications.feedback.serializers import FavoriteSerializer

@@ -6,9 +6,9 @@ from applications.category.models import Category
 User = get_user_model
 
 class Sneakers(models.Model):
-    title = models.CharField('Название кроссовки', max_length=50, null=True, blank=True)
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='Brand')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='Category')
+    title = models.CharField('Название кроссовки', max_length=50)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='sneakers')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='sneakers')
     color = models.CharField('Цвет', max_length=30)
     size = models.BigIntegerField('Размер кросовки')
     price = models.DecimalField(max_digits=30, decimal_places=12)
@@ -16,11 +16,11 @@ class Sneakers(models.Model):
 
     def __str__(self):
         return f'{self.title}'
-    
+
 
 class SneakersImage(models.Model):
-    sneaker = models.ForeignKey(Sneakers, on_delete=models.CASCADE, related_name='Images')
-    image = models.ImageField(upload_to='post_images')
+    sneaker = models.ForeignKey(Sneakers, on_delete=models.CASCADE, related_name='sneakers')
+    image = models.ImageField(upload_to='sneakers_images')
     
     def __str__(self):
         return f'{self.sneaker.title}'
