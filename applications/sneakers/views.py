@@ -1,7 +1,7 @@
 from rest_framework import generics
 from applications.sneakers.models import Sneakers, SneakersImage
 from applications.feedback.models import Like, Rating
-from applications.sneakers.serializers import PostSerializer, PostImageSerializer, CommentSerializer
+from applications.sneakers.serializers import SneakersSerializer, SneakersImageSerializer, CommentSerializer
 from applications.feedback.serializers import RatingSerializer
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from applications.sneakers.permissions import IsOwner
@@ -18,65 +18,9 @@ class CustomPagination(PageNumberPagination):
     max_page_size = 10000
 
 
-
-# class PostListAPIView(generics.ListAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-
-
-# class PostCreateAPIView(generics.CreateAPIView):
-#     serializer_class = PostSerializer
-    
-
-# class PostUpdateAPIView(generics.UpdateAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-
-
-# class PostDeleteAPIView(generics.DestroyAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-
-
-# class PostDetailAPIVew(generics.RetrieveAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-#     lookup_field = 'id'
-
-# class PostListCreateAPIView(generics.ListCreateAPIView):
-#     permission_classes = [IsOwner]
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-#     pagination_class = CustomPagination
-
-#     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-#     filterset_fields = ['owner', 'title']
-#     # filterset_fields = '__all__'
-#     search_fields = ['title']
-#     ordering_fields = ['id', 'owner']
-
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-
-    #     # queryset = queryset.filter(owner=5)
-    #     filter_owner = self.request.query_params.get('owner')
-    #     if filter_owner:
-    #         queryset = queryset.filter(owner=filter_owner)
-
-    #     return queryset
-#     def perform_create(self, serializer):
-#         serializer.save(owner=self.request.user)
-
-
-# class PostDetailDeleteUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
-#     permission_classes = [IsOwner]
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-
-
-class PostModelViewSet(ModelViewSet):
+class SneakersModelViewSet(ModelViewSet):
     queryset = Sneakers.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = SneakersSerializer
     permission_classes = [IsOwner]
 
     pagination_class = CustomPagination
@@ -87,7 +31,7 @@ class PostModelViewSet(ModelViewSet):
     ordering_fields = ['id', 'owner']
 
     
-    @action(methods=['POST'], detail=True) # localhost:8000/api/v1/post/18/like/
+    @action(methods=['POST'], detail=True)
     def like(self, request, pk, *args, **kwargs):
         user = request.user
         like_obj, _ = Like.objects.get_or_create(owner=user, post_id=pk)
@@ -101,7 +45,7 @@ class PostModelViewSet(ModelViewSet):
         return Response({'status': status})
 
 
-    @action(methods=['POST'], detail=True) # localhost:8000/api/v1/post/18/rating/
+    @action(methods=['POST'], detail=True)
     def rating(self, request, pk, *args, **kwargs):
         serializer = RatingSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -118,7 +62,7 @@ class PostModelViewSet(ModelViewSet):
 
 class CreateImageAPIView(generics.CreateAPIView):
     queryset = SneakersImage.objects.all()
-    serializer_class = PostImageSerializer
+    serializer_class = SneakersImageSerializer
     permission_classes = [IsAuthenticated]
 
 
