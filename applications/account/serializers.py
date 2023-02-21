@@ -2,18 +2,17 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from applications.account.send_email import send_activation_code
 
-User = get_user_model() # CustomUser
+User = get_user_model()
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(
         required=True,
-        min_length=6,
+        min_length=8,
         write_only=True
     )
 
     class Meta:
-        # model = CustomUser
         model = User 
         fields = ('username', 'email', 'password', 'password2')
 
@@ -38,7 +37,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True)
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
 
@@ -48,11 +46,11 @@ class LoginSerializer(serializers.Serializer):
         raise serializers.ValidationError('User not found')
 
     def validate(self, attrs):
-        username = attrs.get('username')
         email = attrs.get('email')
         password = attrs.get('password')
 
-        user = authenticate(username=username, password=password)
+
+        user = authenticate(username=email, password=password)
         if not user:
             raise serializers.ValidationError('Incorrect password')
         attrs['user'] = user
