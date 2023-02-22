@@ -19,7 +19,7 @@ class Sneakers(models.Model):
 
 
 class SneakersImage(models.Model):
-    sneaker = models.ForeignKey(Sneakers, on_delete=models.CASCADE, related_name='sneakers')
+    sneakers = models.ForeignKey(Sneakers, on_delete=models.CASCADE, related_name='sneakers')
     image = models.ImageField(upload_to='sneakers_images')
     
     def __str__(self):
