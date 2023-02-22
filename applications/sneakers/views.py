@@ -1,10 +1,9 @@
 from rest_framework import generics
 from applications.sneakers.models import Sneakers, SneakersImage
-from applications.feedback.models import Like, Rating
-from applications.sneakers.serializers import SneakersSerializer, SneakersImageSerializer, CommentSerializer
+from applications.feedback.models import Rating
+from applications.sneakers.serializers import SneakersSerializer, SneakersImageSerializer
 from applications.feedback.serializers import RatingSerializer
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from applications.sneakers.permissions import IsOwner
+from rest_framework.permissions import IsAdminUser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
@@ -21,29 +20,14 @@ class CustomPagination(PageNumberPagination):
 class SneakersModelViewSet(ModelViewSet):
     queryset = Sneakers.objects.all()
     serializer_class = SneakersSerializer
-    permission_classes = [IsOwner]
+    permission_classes = [IsAdminUser]
 
     pagination_class = CustomPagination
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['owner', 'title']
-    search_fields = ['title']
-    ordering_fields = ['id', 'owner']
-
-    
-    @action(methods=['POST'], detail=True)
-    def like(self, request, pk, *args, **kwargs):
-        user = request.user
-        like_obj, _ = Like.objects.get_or_create(owner=user, post_id=pk)
-        like_obj.is_like = not like_obj.is_like
-        like_obj.save()
-        status = 'liked'
-
-        if not like_obj.is_like:
-            status = 'unliked'
-
-        return Response({'status': status})
-
+    filterset_fields = ['title', 'brand']
+    search_fields = ['title', 'brand']
+    ordering_fields = ['price', 'brand']
 
     @action(methods=['POST'], detail=True)
     def rating(self, request, pk, *args, **kwargs):
@@ -54,8 +38,6 @@ class SneakersModelViewSet(ModelViewSet):
         rating_obj.save()
         return Response(serializer.data)
 
-
-
     def  perform_create(self, serializer):
         serializer.save(owner=self.request.user)
         
@@ -63,21 +45,4 @@ class SneakersModelViewSet(ModelViewSet):
 class CreateImageAPIView(generics.CreateAPIView):
     queryset = SneakersImage.objects.all()
     serializer_class = SneakersImageSerializer
-    permission_classes = [IsAuthenticated]
-
-
-class CommentViewSet(ViewSet):
-    def list(self, request):
-        comments = Sneakers.objects.all()
-        serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data)
-
-
-
-class CommentModelViewSet(ModelViewSet):
-    queryset = Sneakers.objects.all()
-    serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    permission_classes = [IsAdminUser]
