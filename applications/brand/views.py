@@ -1,6 +1,6 @@
 from applications.brand.models import Brand
 from applications.brand.serializers import BrandSerializer
-from rest_framework.permissions import IsAdminUser
+from applications.brand.permissions import IsAdmin
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
@@ -15,7 +15,7 @@ class CustomPagination(PageNumberPagination):
 class BrandsModelViewSet(ModelViewSet):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdmin]
 
     pagination_class = CustomPagination
 

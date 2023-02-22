@@ -1,13 +1,12 @@
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
-from applications.feedback.models import Favorite
+from applications.feedback.models import Favorite, Comment
 from applications.sneakers.models import Sneakers
 from applications.feedback.serializers import FavoriteSerializer, CommentSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-
 
 class FavoriteModelViewSet(mixins.CreateModelMixin,
                    mixins.RetrieveModelMixin,
@@ -33,7 +32,7 @@ class CommentViewSet(ViewSet):
         return Response(serializer.data)
 
 class CommentModelViewSet(ModelViewSet):
-    queryset = Sneakers.objects.all()
+    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
