@@ -1,10 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from applications.feedback.views import FavoriteModelViewSet
+from applications.feedback.views import FavoriteModelViewSet, CommentModelViewSet
 
 router = DefaultRouter()
-router.register('', FavoriteModelViewSet)
+router.register('favorite', FavoriteModelViewSet)
+router.register('comment', CommentModelViewSet)
 
 urlpatterns = [
-    path('favorite/', include(router.urls))
+    path('', include(router.urls)),
 ]

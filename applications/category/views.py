@@ -1,6 +1,6 @@
 from applications.category.models import Category
 from applications.category.serializers import CategorySerializer
-from rest_framework.permissions import IsAdminUser
+from applications.category.permissions import IsAdmin
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
@@ -15,7 +15,7 @@ class CustomPagination(PageNumberPagination):
 class CategoryModelViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdmin]
 
     pagination_class = CustomPagination
 
