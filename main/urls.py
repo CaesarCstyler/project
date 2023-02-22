@@ -21,4 +21,3 @@ urlpatterns = [
     path('api/v1/sneakers/', include('applications.sneakers.urls')),
     path('api/v1/feedback/', include('applications.feedback.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

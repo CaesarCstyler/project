@@ -1,9 +1,12 @@
-from django.shortcuts import render
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 from applications.feedback.models import Favorite
-from applications.feedback.serializers import FavoriteSerializer
+from applications.sneakers.models import Sneakers
+from applications.feedback.serializers import FavoriteSerializer, CommentSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ViewSet, ModelViewSet
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
 
 
 class FavoriteModelViewSet(mixins.CreateModelMixin,
@@ -22,3 +25,17 @@ class FavoriteModelViewSet(mixins.CreateModelMixin,
         queryset = super().get_queryset()
         queryset = queryset.filter(owner=self.request.user)
         return queryset
+
+class CommentViewSet(ViewSet):
+    def list(self, request):
+        comments = Sneakers.objects.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+class CommentModelViewSet(ModelViewSet):
+    queryset = Sneakers.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
