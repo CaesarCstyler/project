@@ -9,8 +9,15 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import action
+
+class LatestSneakersList(APIView):
+    def get(self, request, format=None):
+        sneakers = Sneakers.objects.all()[0:4]
+        serializer = SneakersSerializer(sneakers, many=True)
+        return Response(serializer.data)
 
 class CustomPagination(PageNumberPagination):
     page_size = 3
@@ -26,9 +33,9 @@ class SneakersModelViewSet(ModelViewSet):
     pagination_class = CustomPagination
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['title', 'brand']
-    search_fields = ['title', 'brand']
-    ordering_fields = ['price', 'brand']
+    filterset_fields = ['name', 'brand']
+    search_fields = ['name', 'brand']
+    ordering_fields = ['name', 'brand']
 
     @action(methods=['POST'], detail=True)
     def rating(self, request, pk, *args, **kwargs):
