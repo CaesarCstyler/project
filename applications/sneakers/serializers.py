@@ -10,26 +10,35 @@ class SneakersImageSerializer(serializers.ModelSerializer):
 
 
 class SneakersSerializer(serializers.ModelSerializer):
-    images = SneakersImageSerializer(many=True, read_only=True)
+    # images = SneakersImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Sneakers
-        fields = '__all__'
+        fields = (
+            'id',
+            'name',
+            'get_absolute_url',
+            'description',
+            'price',
+            'get_image',
+            'get_thumbnail'
+        )
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
 
-        return representation
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
 
-    def create(self, validated_data):
-        sneakers = Sneakers.objects.create(**validated_data)
+    #     return representation
 
-        request = self.context.get('request')
-        data = request.FILES
-        image_objects = []
-        for i in data.getlist('images'):
-            image_objects.append(SneakersImage(sneakers=sneakers, image=i))
-        Sneakers.objects.bulk_create(image_objects)
+    # def create(self, validated_data):
+    #     sneakers = Sneakers.objects.create(**validated_data)
 
-        return sneakers
+    #     request = self.context.get('request')
+    #     data = request.FILES
+    #     image_objects = []
+    #     for i in data.getlist('images'):
+    #         image_objects.append(SneakersImage(sneakers=sneakers, image=i))
+    #     Sneakers.objects.bulk_create(image_objects)
+
+    #     return sneakers
