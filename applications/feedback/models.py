@@ -23,5 +23,5 @@ class Rating(models.Model):
         return f'{self.owner} --> {self.sneaker.title}'
     
 class Favorite(models.Model):
-    sneaker = models.ForeignKey(Sneakers, on_delete=models.CASCADE, related_name='favorites')
+    sneakers = models.ForeignKey(Sneakers, on_delete=models.CASCADE, related_name='favorites')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
