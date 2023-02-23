@@ -1,12 +1,10 @@
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
-from applications.feedback.models import Favorite, Comment
-from applications.sneakers.models import Sneakers
-from applications.feedback.serializers import FavoriteSerializer, CommentSerializer
+from applications.feedback.models import Favorite, Comment, Rating
+from applications.feedback.serializers import FavoriteSerializer, CommentSerializer, RatingSerializer
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ViewSet, ModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
 
 class FavoriteModelViewSet(mixins.CreateModelMixin,
                    mixins.RetrieveModelMixin,
@@ -25,11 +23,14 @@ class FavoriteModelViewSet(mixins.CreateModelMixin,
         queryset = queryset.filter(owner=self.request.user)
         return queryset
 
-class CommentViewSet(ViewSet):
-    def list(self, request):
-        comments = Sneakers.objects.all()
-        serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data)
+class RatingModelViewSet(ModelViewSet):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 
 class CommentModelViewSet(ModelViewSet):
     queryset = Comment.objects.all()

@@ -1,26 +1,67 @@
+from io import BytesIO
+from PIL import Image
+from django.core.files import File
 from django.db import models
-from django.contrib.auth import get_user_model
 from applications.brand.models import Brand
 from applications.category.models import Category
 
-User = get_user_model
-
 class Sneakers(models.Model):
-    title = models.CharField('Название кроссовки', max_length=50)
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='sneakers')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='sneakers')
-    color = models.CharField('Цвет', max_length=30)
-    size = models.BigIntegerField('Размер кросовки')
-    price = models.DecimalField(max_digits=30, decimal_places=12)
-    in_stock = models.BooleanField(verbose_name='В наличии')
+    name = models.CharField(max_length=100)
+    slug = models.SlugField()
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    image = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-date_added',)
 
     def __str__(self):
-        return f'{self.title}'
+        return self.name
+    
+    def get_absolute_url(self):
+        return f'/{self.category.slug}/{self.slug}/'
 
+    def get_image(self):
+        if self.image:
+            return 'http://127.0.0.1:8000' + self.image.url
+        return ''
+
+    def get_thumbnail(self):
+        if self.thumbnail:
+            return 'http://127.0.0.1:8000' + self.thumbnail.url
+        else:
+            if self.image:
+                self.thumbnail = self.make_thumbnail(self.image)
+                self.save()
+                
+                return 'https://127.0.0.1:800' + self.thumbnail.url
+            else:
+                return ''
+
+    def make_thumbnail(self, image, size=(300, 200)):
+        img = Image.open(image)
+        img.convert('RGB')
+        img.thumbnail(size)
+
+        thumb_io = BytesIO()
+        img.save(thumb_io, 'JPEG', quality=85)
+
+        thumbnail = File(thumb_io, name=image.name)
+        
+        return thumbnail
+
+
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='sneakers')
+    color = models.CharField('Цвет', max_length=30)
+    size = models.BigIntegerField('Размер кросовки')
+    in_stock = models.BooleanField(verbose_name='В наличии')
 
 class SneakersImage(models.Model):
     sneakers = models.ForeignKey(Sneakers, on_delete=models.CASCADE, related_name='sneakers')
     image = models.ImageField(upload_to='sneakers_images')
     
     def __str__(self):
-        return f'{self.sneaker.title}'
+        return f'{self.sneakers.title}'
