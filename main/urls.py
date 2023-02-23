@@ -22,4 +22,5 @@ urlpatterns = [
     path('api/v1/feedback/', include('applications.feedback.urls')),
     path('api/v1/brand/', include('applications.brand.urls')),
     path('api/v1/category/', include('applications.category.urls')),
+    path('api/v1/order/', include('applications.sneakers.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

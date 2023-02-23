@@ -11,6 +11,9 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.views import APIView
+from rest_framework import status
+from applications.sneakers.serializers import OrderSerializer
 
 class CustomPagination(PageNumberPagination):
     page_size = 3
@@ -39,8 +42,12 @@ class SneakersModelViewSet(ModelViewSet):
         rating_obj.save()
         return Response(serializer.data)
         
-
-class CreateImageAPIView(generics.CreateAPIView):
-    queryset = SneakersImage.objects.all()
-    serializer_class = SneakersImageSerializer
-    permission_classes = [IsAdminUser]
+class OrderCreateView(APIView):
+    def post(self, request, format=None):
+        serializer = OrderSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        a =  Sneakers.objects.get(pk =request.data['sneakers'])
+    
+        serializer.save()
+        return Response('1101110101010')
+    

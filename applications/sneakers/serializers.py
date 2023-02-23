@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from applications.sneakers.models import Sneakers, SneakersImage
+from applications.sneakers.models import Sneakers, SneakersImage, Order
 from django.db.models import Avg
 
 class SneakersImageSerializer(serializers.ModelSerializer):
@@ -33,3 +33,12 @@ class SneakersSerializer(serializers.ModelSerializer):
         Sneakers.objects.bulk_create(image_objects)
 
         return sneakers
+
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Order
+        fields = ('sneakers', 'quantity', 'description')
+    
