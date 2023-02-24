@@ -14,6 +14,7 @@ from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework import status
 from applications.sneakers.serializers import OrderSerializer
+from applications.sneakers.models import Order
 
 class CustomPagination(PageNumberPagination):
     page_size = 3
@@ -46,8 +47,13 @@ class OrderCreateView(APIView):
     def post(self, request, format=None):
         serializer = OrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        a =  Sneakers.objects.get(pk =request.data['sneakers'])
-    
+        a = Sneakers.objects.get(pk =request.data['sneakers'])
         serializer.save()
-        return Response('1101110101010')
+        return Response('Ваш заказ обработан!')
     
+    def post2(self, quantity, request):
+        serializer = OrderSerializer(quantity)
+        serializer2 = OrderSerializer(data = request.data)
+        a = Sneakers.objects.get(   request.data['sneakers'])
+        total_price = quantity * a.price
+        return Response(total_price)

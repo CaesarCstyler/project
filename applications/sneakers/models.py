@@ -28,10 +28,5 @@ class SneakersImage(models.Model):
 class Order(models.Model):
     sneakers = models.ForeignKey(Sneakers, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    total_price = models.DecimalField(max_digits=10, decimal_places=2,default=0, )
+    total_price = models.DecimalField(max_digits=10, decimal_places=2,default=0)
     description = models.TextField()
-    
-    # def create_total_price(self, ):
-    #     a = Sneakers.objects.get(id=self.sneakers )
-    #     self.total_price = a.price * self.quantity
-        
