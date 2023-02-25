@@ -52,6 +52,10 @@ INSTALLED_APPS = [
     'applications.sneakers',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
