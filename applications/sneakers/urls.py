@@ -10,6 +10,7 @@ from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     path('latest-sneakers/', views.LatestSneakersList.as_view()),
+    path('sneakers/<slug:category_slug>/<slug:sneakers_slug>/', views.SneakersDetail.as_view()),
     # path('', include(router.urls)),
     # path('add/image/', CreateImageAPIView.as_view()),
 ]
