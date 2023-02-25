@@ -50,10 +50,14 @@ export default {
   },
   mounted() {
     this.getLatestSneakers()
+
+    document.title = 'Home | Sneakers'
   },
   methods: {
-    getLatestSneakers() {
-      axios
+    async getLatestSneakers() {
+      this.$store.commit('setIsLoading', true)
+
+      await axios
         .get('/api/v1/latest-sneakers/')
         .then(response => {
           this.latestSneakers = response.data
@@ -61,6 +65,8 @@ export default {
         .catch(error => {
           console.log(error)
         })
+
+      this.$store.commit('setIsLoading', false)
     }
   }
 }
