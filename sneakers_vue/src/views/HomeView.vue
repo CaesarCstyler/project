@@ -1,43 +1,33 @@
 <template>
   <div class="home">
     <section class="hero is-medium is-dark mb-6">
-      <div class="hero-body has-text-centered">
-        <p class="title mb-6">
-          Welcome to ArnalImanShoes
-        </p>
-        <p class="subtitle">
-          The best sneakers store online
-        </p>
-      </div>
+        <div class="hero-body has-text-centered">
+            <p class="title mb-6">
+                Welcome to ArnalIman Sneakers Shop
+            </p>
+            <p class="subtitle">
+                The best sneakers shop online
+            </p>
+        </div>
     </section>
 
-    <div class="columns-is-multiline">
+    <div class="columns is-multiline">
       <div class="column is-12">
-        <h2 class="is-size-2 has-text-centered">Latest sneakers</h2>
+          <h2 class="is-size-2 has-text-centered">Latest products</h2>
       </div>
 
-      <div 
-        class="column is-3" 
-        v-for="sneakers in latestSneakers" 
+      <SneakersBox
+        v-for="sneakers in latestSneakers"
         v-bind:key="sneakers.id"
-      >
-        <div class="box">
-          <figure class="image mb-4">
-            <img :src="sneakers.get_thumbnail">
-          </figure>
-
-          <h3 class="is-size-4">{{ sneakers.name }}</h3>
-          <p class="is-size-6 has-text-grey">${{ sneakers.price }}</p>
-
-          <router-link v-bind:to="sneakers.get_absolute_url" class="button is-dark mt-4">View details</router-link>
-        </div>
-      </div>
+        v-bind:sneakers="sneakers" />
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+
+import SneakersBox from '@/components/SneakersBox'
 
 export default {
   name: 'Home',
@@ -47,13 +37,18 @@ export default {
     }
   },
   components: {
+    SneakersBox
   },
   mounted() {
     this.getLatestSneakers()
+
+    document.title = 'Home | Sneakers'
   },
   methods: {
-    getLatestSneakers() {
-      axios
+    async getLatestSneakers() {
+      this.$store.commit('setIsLoading', true)
+
+      await axios
         .get('/api/v1/latest-sneakers/')
         .then(response => {
           this.latestSneakers = response.data
@@ -61,15 +56,9 @@ export default {
         .catch(error => {
           console.log(error)
         })
+
+      this.$store.commit('setIsLoading', false)
     }
   }
 }
 </script>
-
-<style scoped>
-  .image {
-    margin-top: -1.25rem;
-    margin-left: -1.25rem;
-    margin-right: -1.25rem;
-  }
-</style>

@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.authtoken')),
     path('api/v1/', include('applications.sneakers.urls')),
+    path('api/v1/', include('applications.category.urls')),
     path('api/v1/account/', include('applications.account.urls')),
     path('api/v1/feedback/', include('applications.feedback.urls')),
     path('api/v1/brand/', include('applications.brand.urls')),

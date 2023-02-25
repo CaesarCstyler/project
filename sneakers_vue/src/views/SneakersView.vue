@@ -22,7 +22,7 @@
                     </div>
 
                     <div class="control">
-                        <a class="button is-dark">Add to cart</a>
+                        <a class="button is-dark" @click="addToCart">Add to cart</a>
                     </div>
                 </div>
             </div>
@@ -32,6 +32,7 @@
 
 <script>
 import axios from 'axios'
+import { toast } from 'bulma-toast'
 
 export default {
     name: 'Sneakers',
@@ -45,18 +46,45 @@ export default {
         this.getSneakers() 
     },
     methods: {
-        getSneakers() {
+        async getSneakers() {
+            this.$store.commit('setIsLoading', true)
+
             const category_slug = this.$route.params.category_slug
             const sneakers_slug = this.$route.params.sneakers_slug
 
-            axios
+            await axios
                 .get(`/api/v1/sneakers/${category_slug}/${sneakers_slug}`)
                 .then(response => {
                     this.sneakers = response.data
+
+                    document.title = this.sneakers.name + ' | Sneakers'
                 })
                 .catch(error => {
                     console.log(error)
                 })
+            
+            this.$store.commit('setIsLoading', false)
+        },
+        addToCart() {
+            if (isNaN(this.quantity) || this.quantity < 1) {
+                this.quantity = 1
+            }
+
+            const item = {
+                sneakers: this.sneakers,
+                quantity: this.quantity
+            }
+
+            this.$store.commit('addToCart', item)
+
+            toast({
+                message: 'The product was added to the cart',
+                type: 'is-success',
+                dismissible: true,
+                pauseOnHover: true,
+                duration: 2000,
+                position: 'bottom-right',
+            })
         }
     }
 }

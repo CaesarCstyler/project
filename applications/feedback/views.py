@@ -1,10 +1,9 @@
-from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
 from applications.feedback.models import Favorite, Comment, Rating
 from applications.feedback.serializers import FavoriteSerializer, CommentSerializer, RatingSerializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 class FavoriteModelViewSet(mixins.CreateModelMixin,
                    mixins.RetrieveModelMixin,
