@@ -1,22 +1,35 @@
-from rest_framework import generics
-from applications.sneakers.models import Sneakers, SneakersImage
-from applications.feedback.models import Rating
-from applications.sneakers.serializers import SneakersSerializer, SneakersImageSerializer
-from applications.feedback.serializers import RatingSerializer
-from applications.sneakers.permissions import IsAdmin
-from rest_framework.permissions import IsAdminUser
+from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics
+from rest_framework.permissions import IsAdminUser
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from applications.sneakers.models import Sneakers, SneakersImage
+from applications.feedback.models import Rating
+from applications.sneakers.serializers import SneakersSerializer, SneakersImageSerializer
+from applications.feedback.serializers import RatingSerializer
+from applications.sneakers.permissions import IsAdmin
 
 class LatestSneakersList(APIView):
     def get(self, request, format=None):
         sneakers = Sneakers.objects.all()[0:4]
         serializer = SneakersSerializer(sneakers, many=True)
+        return Response(serializer.data)
+
+class SneakersDetail(APIView):
+    def get_object(self, category_slug, sneakers_slug):
+        try:
+            return Sneakers.objects.filter(category__slug=category_slug).get(slug=sneakers_slug)
+        except Sneakers.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, category_slug, sneakers_slug, format=None):
+        sneakers = self.get_object(category_slug, sneakers_slug)
+        serializer = SneakersSerializer(sneakers)
         return Response(serializer.data)
 
 class CustomPagination(PageNumberPagination):

@@ -11,5 +11,5 @@ from rest_framework.routers import DefaultRouter
 urlpatterns = [
     path('latest-sneakers/', views.LatestSneakersList.as_view()),
     # path('', include(router.urls)),
-    path('add/image/', CreateImageAPIView.as_view()),
+    # path('add/image/', CreateImageAPIView.as_view()),
 ]
