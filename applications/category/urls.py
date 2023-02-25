@@ -7,6 +7,7 @@ router = DefaultRouter()
 router.register('', CategoryModelViewSet)
 
 urlpatterns = [
+    path('sneakers/search/', views.search),
     path('sneakers/<slug:category_slug>/', views.CategoryDetail.as_view()),
-    path('', include(router.urls)),
+    # path('', include(router.urls)),
 ]

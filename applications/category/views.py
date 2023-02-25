@@ -44,7 +44,7 @@ def search(request):
         serializer = SneakersSerializer(sneakers, many=True)
         return Response(serializer.data)
     else:
-        return Response({"sneakers": []})
+        return Response({'sneakers': []})
 
 
 class CategoryModelViewSet(ModelViewSet):
