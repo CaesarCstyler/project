@@ -46,9 +46,9 @@ class SneakersModelViewSet(ModelViewSet):
     pagination_class = CustomPagination
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['name', 'brand']
-    search_fields = ['name', 'brand']
-    ordering_fields = ['name', 'brand']
+    filterset_fields = ['name', 'price']
+    search_fields = ['name', 'price']
+    ordering_fields = ['name', 'price']
 
     @action(methods=['POST'], detail=True)
     def rating(self, request, pk, *args, **kwargs):
@@ -63,4 +63,4 @@ class SneakersModelViewSet(ModelViewSet):
 class CreateImageAPIView(generics.CreateAPIView):
     queryset = SneakersImage.objects.all()
     serializer_class = SneakersImageSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdmin]

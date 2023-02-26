@@ -38,7 +38,7 @@ class Sneakers(models.Model):
                 self.thumbnail = self.make_thumbnail(self.image)
                 self.save()
                 
-                return 'https://127.0.0.1:800' + self.thumbnail.url
+                return 'https://127.0.0.1:8000' + self.thumbnail.url
             else:
                 return ''
 
