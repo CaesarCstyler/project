@@ -23,7 +23,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
-
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'applications.category',
     'applications.feedback',
     'applications.sneakers',
+    'applications.order',
 ]
 
 CORS_ALLOWED_ORIGINS = [
