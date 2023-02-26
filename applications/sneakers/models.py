@@ -54,12 +54,6 @@ class Sneakers(models.Model):
         
         return thumbnail
 
-
-    # brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='sneakers')
-    # color = models.CharField('Цвет', max_length=30)
-    # size = models.BigIntegerField('Размер кросовки')
-    # in_stock = models.BooleanField(verbose_name='В наличии')
-
 class SneakersImage(models.Model):
     sneakers = models.ForeignKey(Sneakers, on_delete=models.CASCADE, related_name='sneakers')
     image = models.ImageField(upload_to='sneakers_images')
