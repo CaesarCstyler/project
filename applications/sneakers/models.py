@@ -4,7 +4,6 @@ from PIL import Image
 from django.core.files import File
 from django.db import models
 
-from applications.brand.models import Brand
 from applications.category.models import Category
 
 class Sneakers(models.Model):
