@@ -5,7 +5,7 @@ from .models import Order, OrderItem
 from applications.sneakers.serializers import SneakersSerializer
 
 class MyOrderItemSerializer(serializers.ModelSerializer):    
-    sneakers = SneakersSerializer()
+    product = SneakersSerializer()
 
     class Meta:
         model = OrderItem
