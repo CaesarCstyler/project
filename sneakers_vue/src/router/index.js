@@ -4,6 +4,9 @@ import Home from '../views/HomeView.vue'
 import Sneakers from '../views/SneakersView.vue'
 import Category from '../views/CategoryView.vue'
 import Search from '../views/SearchView.vue'
+import Cart from '../views/CartView.vue'
+import SignUp from '../views/SignUpView.vue'
+import LogIn from '../views/LogInView.vue'
 
 const routes = [
   {
@@ -20,9 +23,24 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
+    path: '/sign-up',
+    name: 'SignUp',
+    component: SignUp
+  },
+  {
+    path: '/log-in',
+    name: 'LogIn',
+    component: LogIn
+  },
+  {
     path: '/search',
     name: 'Search',
     component: Search
+  },
+  {
+    path: '/cart',
+    name: 'Cart',
+    component: Cart
   },
   {
     path: '/:category_slug/:sneakers_slug',
