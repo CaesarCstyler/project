@@ -4,7 +4,6 @@ from PIL import Image
 from django.core.files import File
 from django.db import models
 
-from applications.brand.models import Brand
 from applications.category.models import Category
 
 class Sneakers(models.Model):
@@ -54,12 +53,6 @@ class Sneakers(models.Model):
         thumbnail = File(thumb_io, name=image.name)
         
         return thumbnail
-
-
-    # brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='sneakers')
-    # color = models.CharField('Цвет', max_length=30)
-    # size = models.BigIntegerField('Размер кросовки')
-    # in_stock = models.BooleanField(verbose_name='В наличии')
 
 class SneakersImage(models.Model):
     sneakers = models.ForeignKey(Sneakers, on_delete=models.CASCADE, related_name='sneakers')
