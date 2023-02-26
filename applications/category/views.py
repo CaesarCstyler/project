@@ -55,6 +55,6 @@ class CategoryModelViewSet(ModelViewSet):
     pagination_class = CustomPagination
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['title']
-    search_fields = ['title']
-    ordering_fields = ['title']
+    filterset_fields = ['name']
+    search_fields = ['name']
+    ordering_fields = ['name']
