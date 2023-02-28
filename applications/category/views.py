@@ -17,6 +17,7 @@ from applications.category.models import Category
 from applications.sneakers.models import Sneakers
 from applications.sneakers.serializers import SneakersSerializer
 from applications.category.serializers import CategorySerializer
+import logging
 
 class CustomPagination(PageNumberPagination):
     page_size = 3
@@ -33,6 +34,7 @@ class CategoryDetail(APIView):
     def get(self, request, category_slug, format=None):
         category = self.get_object(category_slug)
         serializer = CategorySerializer(category)
+        logger.info('Logouted')
         return Response(serializer.data)
 
 @api_view(['POST'])
@@ -42,8 +44,10 @@ def search(request):
     if query:
         sneakers = Sneakers.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
         serializer = SneakersSerializer(sneakers, many=True)
+        logger.info('Logouted')
         return Response(serializer.data)
     else:
+        logger.info('Logouted')
         return Response({'sneakers': []})
 
 
@@ -58,3 +62,5 @@ class CategoryModelViewSet(ModelViewSet):
     filterset_fields = ['name']
     search_fields = ['name']
     ordering_fields = ['name']
+
+logger = logging.getLogger('main')
